@@ -1,0 +1,627 @@
+PS E:\Project\OERV-research\openruyi\pretask> qemu-system-riscv64.exe `
+>>   -machine virt `
+>>   -cpu rv64 `
+>>   -smp 4 `
+>>   -accel tcg,thread=multi `
+>>   -m 3G `
+>>   -kernel .\boot\vmlinuz-6.18.10-lfs-13.0-systemd `
+>>   -append "root=/dev/vda1 rw console=ttyS0" `
+>>   -drive file=riscv64-lfs.img,format=raw,if=none,id=hd `
+>>   -device virtio-blk-device,drive=hd `
+>>   -drive file=blfs-sources.img,format=raw,if=none,id=src `
+>>   -device virtio-blk-device,drive=src `
+>>   -netdev user,id=net0,hostfwd=tcp:127.0.0.1:22222-:22 `
+>>   -device virtio-net-device,netdev=net0 `
+>>   -nographic
+
+OpenSBI v1.7
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name               : riscv-virtio,qemu
+Platform Features           : medeleg
+Platform HART Count         : 4
+Platform IPI Device         : aclint-mswi
+Platform Timer Device       : aclint-mtimer @ 10000000Hz
+Platform Console Device     : uart8250
+Platform HSM Device         : ---
+Platform PMU Device         : ---
+Platform Reboot Device      : syscon-reboot
+Platform Shutdown Device    : syscon-poweroff
+Platform Suspend Device     : ---
+Platform CPPC Device        : ---
+Firmware Base               : 0x80000000
+Firmware Size               : 353 KB
+Firmware RW Offset          : 0x40000
+Firmware RW Size            : 97 KB
+Firmware Heap Offset        : 0x4c000
+Firmware Heap Size          : 49 KB (total), 3 KB (reserved), 12 KB (used), 33 KB (free)
+Firmware Scratch Size       : 4096 B (total), 1400 B (used), 2696 B (free)
+Runtime SBI Version         : 3.0
+Standard SBI Extensions     : time,rfnc,ipi,base,hsm,srst,pmu,dbcn,fwft,legacy,dbtr,sse
+Experimental SBI Extensions : none
+
+Domain0 Name                : root
+Domain0 Boot HART           : 2
+Domain0 HARTs               : 0*,1*,2*,3*
+Domain0 Region00            : 0x0000000000100000-0x0000000000100fff M: (I,R,W) S/U: (R,W)
+Domain0 Region01            : 0x0000000010000000-0x0000000010000fff M: (I,R,W) S/U: (R,W)
+Domain0 Region02            : 0x0000000002000000-0x000000000200ffff M: (I,R,W) S/U: ()
+Domain0 Region03            : 0x0000000080040000-0x000000008005ffff M: (R,W) S/U: ()
+Domain0 Region04            : 0x0000000080000000-0x000000008003ffff M: (R,X) S/U: ()
+Domain0 Region05            : 0x000000000c400000-0x000000000c5fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region06            : 0x000000000c000000-0x000000000c3fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region07            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
+Domain0 Next Address        : 0x0000000080200000
+Domain0 Next Arg1           : 0x000000013fe00000
+Domain0 Next Mode           : S-mode
+Domain0 SysReset            : yes
+Domain0 SysSuspend          : yes
+
+Boot HART ID                : 2
+Boot HART Domain            : root
+Boot HART Priv Version      : v1.12
+Boot HART Base ISA          : rv64imafdch
+Boot HART ISA Extensions    : sstc,zicntr,zihpm,zicboz,zicbom,sdtrig,svadu
+Boot HART PMP Count         : 16
+Boot HART PMP Granularity   : 2 bits
+Boot HART PMP Address Bits  : 54
+Boot HART MHPM Info         : 16 (0x0007fff8)
+Boot HART Debug Triggers    : 2 triggers
+Boot HART MIDELEG           : 0x0000000000001666
+Boot HART MEDELEG           : 0x0000000000f4b509
+[    0.000000] Booting Linux on hartid 2
+[    0.000000] Linux version 6.18.10 (steve@DESKTOP-LLICT9J) (riscv64-linux-gnu-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #1 SMP Mon May 25 00:18:51 CST 2026
+[    0.000000] random: crng init done
+[    0.000000] Machine model: riscv-virtio,qemu
+[    0.000000] SBI specification v3.0 detected
+[    0.000000] SBI implementation ID=0x1 Version=0x10007
+[    0.000000] SBI TIME extension detected
+[    0.000000] SBI IPI extension detected
+[    0.000000] SBI RFENCE extension detected
+[    0.000000] SBI SRST extension detected
+[    0.000000] SBI DBCN extension detected
+[    0.000000] SBI FWFT extension detected
+[    0.000000] efi: UEFI not found.
+[    0.000000] OF: reserved mem: 0x0000000080000000..0x000000008003ffff (256 KiB) nomap non-reusable mmode_resv1@80000000
+[    0.000000] OF: reserved mem: 0x0000000080040000..0x000000008005ffff (128 KiB) nomap non-reusable mmode_resv0@80040000
+[    0.000000] Zone ranges:
+[    0.000000]   DMA32    [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000]   Normal   [mem 0x0000000100000000-0x000000013fffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x000000008005ffff]
+[    0.000000]   node   0: [mem 0x0000000080060000-0x000000013fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x000000013fffffff]
+[    0.000000] SBI HSM extension detected
+[    0.000000] riscv: base ISA extensions acdfhim
+[    0.000000] riscv: ELF capabilities acdfim
+[    0.000000] Queued spinlock using Ziccrse: enabled
+[    0.000000] percpu: Embedded 31 pages/cpu s86296 r8192 d32488 u126976
+[    0.000000] Kernel command line: root=/dev/vda1 rw console=ttyS0
+[    0.000000] printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+[    0.000000] software IO TLB: area num 4.
+[    0.000000] software IO TLB: mapped [mem 0x00000000fbfff000-0x00000000fffff000] (64MB)
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 786432
+[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu:     RCU event tracing is enabled.
+[    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=64 to nr_cpu_ids=4.
+[    0.000000]  Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 64 local interrupts mapped
+[    0.000000] riscv: providing IPIs using SBI IPI extension
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns
+[    0.000078] sched_clock: 64 bits at 10MHz, resolution 100ns, wraps every 4398046511100ns
+[    0.000194] riscv-timer: Timer interrupt in S-mode is available via sstc extension
+[    0.011779] Console: colour dummy device 80x25
+[    0.015233] Calibrating delay loop (skipped), value calculated using timer frequency.. 20.00 BogoMIPS (lpj=40000)
+[    0.015416] pid_max: default: 32768 minimum: 301
+[    0.018189] LSM: initializing lsm=capability
+[    0.021240] Mount-cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.021327] Mountpoint-cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.062731] riscv: ELF compat mode supported
+[    0.063091] ASID allocator using 16 bits (65536 entries)
+[    0.064981] rcu: Hierarchical SRCU implementation.
+[    0.065030] rcu:     Max phase no-delay instances is 1000.
+[    0.067027] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.069167] EFI services will not be available.
+[    0.070654] smp: Bringing up secondary CPUs ...
+[    0.087299] smp: Brought up 1 node, 4 CPUs
+[    0.092611] Memory: 2973640K/3145728K available (11609K kernel code, 5896K rwdata, 6144K rodata, 2421K init, 415K bss, 167632K reserved, 0K cma-reserved)
+[    0.106841] devtmpfs: initialized
+[    0.120226] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.120449] posixtimers hash table entries: 2048 (order: 3, 32768 bytes, linear)
+[    0.120734] futex hash table entries: 1024 (65536 bytes on 1 NUMA nodes, total 64 KiB, linear).
+[    0.123200] pinctrl core: initialized pinctrl subsystem
+[    0.131540] DMI not present or invalid.
+[    0.134003] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.137415] DMA: preallocated 512 KiB GFP_KERNEL pool for atomic allocations
+[    0.137873] DMA: preallocated 512 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.138074] audit: initializing netlink subsys (disabled)
+[    0.140761] audit: type=2000 audit(0.108:1): state=initialized audit_enabled=0 res=1
+[    0.142964] thermal_sys: Registered thermal governor 'step_wise'
+[    0.143681] cpuidle: using governor menu
+[    0.146951] SBI misaligned access exception delegation ok
+[    0.174349] cpu3: Ratio of byte access time to unaligned word access is 6.76, unaligned accesses are fast
+[    0.174365] cpu1: Ratio of byte access time to unaligned word access is 7.08, unaligned accesses are fast
+[    0.174362] cpu2: Ratio of byte access time to unaligned word access is 6.42, unaligned accesses are fast
+[    0.203683] cpu0: Ratio of byte access time to unaligned word access is 7.08, unaligned accesses are fast
+[    0.228484] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.228534] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[    0.232789] ACPI: Interpreter disabled.
+[    0.233510] iommu: Default domain type: Translated
+[    0.233540] iommu: DMA domain TLB invalidation policy: strict mode
+[    0.240704] SCSI subsystem initialized
+[    0.243932] usbcore: registered new interface driver usbfs
+[    0.244236] usbcore: registered new interface driver hub
+[    0.244353] usbcore: registered new device driver usb
+[    0.247373] Advanced Linux Sound Architecture Driver Initialized.
+[    0.263744] vgaarb: loaded
+[    0.269442] clocksource: Switched to clocksource riscv_clocksource
+[    0.276323] pnp: PnP ACPI: disabled
+[    0.317051] NET: Registered PF_INET protocol family
+[    0.318962] IP idents hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.328139] tcp_listen_portaddr_hash hash table entries: 2048 (order: 3, 32768 bytes, linear)
+[    0.328226] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.328291] TCP established hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[    0.328933] TCP bind hash table entries: 32768 (order: 8, 1048576 bytes, linear)
+[    0.329590] TCP: Hash tables configured (established 32768 bind 32768)
+[    0.330618] UDP hash table entries: 2048 (order: 5, 131072 bytes, linear)
+[    0.330878] UDP-Lite hash table entries: 2048 (order: 5, 131072 bytes, linear)
+[    0.332901] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.337462] RPC: Registered named UNIX socket transport module.
+[    0.337539] RPC: Registered udp transport module.
+[    0.337549] RPC: Registered tcp transport module.
+[    0.337556] RPC: Registered tcp-with-tls transport module.
+[    0.337563] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.337713] PCI: CLS 0 bytes, default 64
+[    0.342069] workingset: timestamp_bits=46 max_order=20 bucket_order=0
+[    0.349537] NFS: Registering the id_resolver key type
+[    0.350039] Key type id_resolver registered
+[    0.350100] Key type id_legacy registered
+[    0.350887] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    0.351048] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    0.352244] 9p: Installing v9fs 9p2000 file system support
+[    0.355149] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 244)
+[    0.356323] io scheduler mq-deadline registered
+[    0.356427] io scheduler kyber registered
+[    0.356763] io scheduler bfq registered
+[    0.368703] riscv-plic: plic@c000000: mapped 95 interrupts with 4 handlers for 8 contexts.
+[    0.373053] pci-host-generic 30000000.pci: host bridge /soc/pci@30000000 ranges:
+[    0.373893] pci-host-generic 30000000.pci:       IO 0x0003000000..0x000300ffff -> 0x0000000000
+[    0.374578] pci-host-generic 30000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
+[    0.374647] pci-host-generic 30000000.pci:      MEM 0x0400000000..0x07ffffffff -> 0x0400000000
+[    0.375333] pci-host-generic 30000000.pci: Memory resource size exceeds max for 32 bits
+[    0.375934] pci-host-generic 30000000.pci: ECAM at [mem 0x30000000-0x3fffffff] for [bus 00-ff]
+[    0.377829] pci-host-generic 30000000.pci: PCI host bridge to bus 0000:00
+[    0.378102] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.378167] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    0.378230] pci_bus 0000:00: root bus resource [mem 0x40000000-0x7fffffff]
+[    0.378246] pci_bus 0000:00: root bus resource [mem 0x400000000-0x7ffffffff]
+[    0.380021] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI endpoint
+[    0.386401] pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+[    0.386455] pci_bus 0000:00: resource 5 [mem 0x40000000-0x7fffffff]
+[    0.386466] pci_bus 0000:00: resource 6 [mem 0x400000000-0x7ffffffff]
+[    0.576425] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+[    0.591276] printk: legacy console [ttyS0] disabled
+[    0.595133] 10000000.serial: ttyS0 at MMIO 0x10000000 (irq = 12, base_baud = 230400) is a 16550A
+[    0.597822] printk: legacy console [ttyS0] enabled
+[    0.953854] loop: module loaded
+[    0.956756] virtio_blk virtio0: 1/0/0 default/read/poll queues
+[    0.963375] virtio_blk virtio0: [vda] 16777216 512-byte logical blocks (8.59 GB/8.00 GiB)
+[    0.985985]  vda: vda1
+[    0.990266] virtio_blk virtio1: 1/0/0 default/read/poll queues
+[    0.993744] virtio_blk virtio1: [vdb] 1024000 512-byte logical blocks (524 MB/500 MiB)
+[    1.022254] e1000e: Intel(R) PRO/1000 Network Driver
+[    1.025623] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    1.031951] usbcore: registered new interface driver uas
+[    1.035408] usbcore: registered new interface driver usb-storage
+[    1.039658] mousedev: PS/2 mouse device common for all mice
+[    1.046930] goldfish_rtc 101000.rtc: registered as rtc0
+[    1.049110] goldfish_rtc 101000.rtc: setting system clock to 2026-05-25T08:23:32 UTC (1779697412)
+[    1.058533] sdhci: Secure Digital Host Controller Interface driver
+[    1.060581] sdhci: Copyright(c) Pierre Ossman
+[    1.062549] Synopsys Designware Multimedia Card Interface Driver
+[    1.065182] sdhci-pltfm: SDHCI platform and OF driver helper
+[    1.070603] usbcore: registered new interface driver usbhid
+[    1.072291] usbhid: USB HID core driver
+[    1.074681] riscv-pmu-sbi: SBI PMU extension is available
+[    1.077246] riscv-pmu-sbi: 16 firmware and 18 hardware counters
+[    1.079364] riscv-pmu-sbi: Perf sampling/filtering is not supported as sscof extension is not available
+[    1.093227] NET: Registered PF_INET6 protocol family
+[    1.108264] Segment Routing with IPv6
+[    1.110553] In-situ OAM (IOAM) with IPv6
+[    1.113643] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    1.121153] NET: Registered PF_PACKET protocol family
+[    1.123859] 9pnet: Installing 9P2000 support
+[    1.126256] Key type dns_resolver registered
+[    1.173512] clk: Disabling unused clocks
+[    1.175606] PM: genpd: Disabling unused power domains
+[    1.177285] ALSA device list:
+[    1.178008]   No soundcards found.
+[    1.188022] check access for rdinit=/init failed: -2, ignoring
+[    1.240119] EXT4-fs (vda1): mounted filesystem c17550b1-644c-409c-903f-82b8fd12f2c9 r/w with ordered data mode. Quota mode: disabled.
+[    1.245643] VFS: Mounted root (ext4 filesystem) on device 254:1.
+[    1.250782] devtmpfs: mounted
+[    1.331680] Freeing unused kernel image (initmem) memory: 2420K
+[    1.335935] Run /sbin/init as init process
+[    2.012982] systemd[1]: systemd 259.1 running in system mode (-PAM -AUDIT -SELINUX -APPARMOR +IMA +IPE +SMACK -SECCOMP -GCRYPT -GNUTLS +OPENSSL +ACL +BLKID -CURL -ELFUTILS -FIDO2 -IDN2 -IDN +KMOD -LIBCRYPTSETUP -LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 -PWQUALITY -P11KIT -QRENCODE -TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -BTF -XKBCOMMON +UTMP +SYSVINIT -LIBARCHIVE)
+[    2.026501] systemd[1]: Detected virtualization qemu.
+[    2.028913] systemd[1]: Detected architecture riscv64.
+
+Welcome to Linux From Scratch!
+
+[    2.048515] systemd[1]: Hostname set to <lfs>.
+[    3.526700] systemd[1]: Queued start job for default target Graphical Interface.
+[    5.418104] systemd[1]: Created slice Slice /system/getty.
+[  OK  ] Created slice Slice /system/getty.
+[    5.445178] systemd[1]: Created slice Slice /system/modprobe.
+[  OK  ] Created slice Slice /system/modprobe.
+[    5.471502] systemd[1]: Created slice Slice /system/serial-getty.
+[  OK  ] Created slice Slice /system/serial-getty.
+[    5.493151] systemd[1]: Created slice User and Session Slice.
+[  OK  ] Created slice User and Session Slice.
+[    5.501834] systemd[1]: Started Dispatch Password Requests to Console Directory Watch.
+[  OK  ] Started Dispatch Password Requests to Console Directory Watch.
+[    5.510416] systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+[  OK  ] Started Forward Password Requests to Wall Directory Watch.
+[    5.517297] systemd[1]: Arbitrary Executable File Formats File System Automount Point skipped, unmet condition check ConditionPathExists=/proc/sys/fs/binfmt_misc
+[    5.522804] systemd[1]: Expecting device /dev/ttyS0...
+         Expecting device /dev/ttyS0...
+[    5.527972] systemd[1]: Reached target Path Units.
+[  OK  ] Reached target Path Units.
+[    5.533912] systemd[1]: Reached target Remote File Systems.
+[  OK  ] Reached target Remote File Systems.
+[    5.538899] systemd[1]: Reached target Slice Units.
+[  OK  ] Reached target Slice Units.
+[    5.543935] systemd[1]: Reached target Swaps.
+[  OK  ] Reached target Swaps.
+[    5.569254] systemd[1]: Listening on Query the User Interactively for a Password.
+[  OK  ] Listening on Query the User Interactively for a Password.
+[    5.591851] systemd[1]: Listening on Process Core Dump Socket.
+[  OK  ] Listening on Process Core Dump Socket.
+[    5.608133] systemd[1]: Listening on Credential Encryption/Decryption.
+[  OK  ] Listening on Credential Encryption/Decryption.
+[    5.631616] systemd[1]: Listening on Factory Reset Management.
+[  OK  ] Listening on Factory Reset Management.
+[    5.639537] systemd[1]: Journal Audit Socket skipped, unmet condition check ConditionSecurity=audit
+[    5.646017] systemd[1]: Listening on Journal Socket (/dev/log).
+[  OK  ] Listening on Journal Socket (/dev/log).
+[    5.653077] systemd[1]: Listening on Journal Sockets.
+[  OK  ] Listening on Journal Sockets.
+[    5.660369] systemd[1]: Listening on DDI File System Mounter Socket.
+[  OK  ] Listening on DDI File System Mounter Socket.
+[    5.683457] systemd[1]: Listening on Console Output Muting Service Socket.
+[  OK  ] Listening on Console Output Muting Service Socket.
+[    5.692491] systemd[1]: Listening on Network Management Resolve Hook Socket.
+[  OK  ] Listening on Network Management Resolve Hook Socket.
+[    5.700585] systemd[1]: Listening on Network Management Varlink Socket.
+[  OK  ] Listening on Network Management Varlink Socket.
+[    5.709078] systemd[1]: Listening on Network Management Netlink Socket.
+[  OK  ] Listening on Network Management Netlink Socket.
+[    5.716528] systemd[1]: Listening on Namespace Resource Manager Socket.
+[  OK  ] Listening on Namespace Resource Manager Socket.
+[    5.723539] systemd[1]: Userspace Out-Of-Memory (OOM) Killer Socket skipped, unmet condition check ConditionPathExists=/proc/pressure/memory
+[    5.739739] systemd[1]: Listening on Disk Repartitioning Service Socket.
+[  OK  ] Listening on Disk Repartitioning Service Socket.
+[    5.746874] systemd[1]: Listening on Resolve Monitor Varlink Socket.
+[  OK  ] Listening on Resolve Monitor Varlink Socket.
+[    5.754589] systemd[1]: Listening on Resolve Service Varlink Socket.
+[  OK  ] Listening on Resolve Service Varlink Socket.
+[    5.762751] systemd[1]: Listening on udev Control Socket.
+[  OK  ] Listening on udev Control Socket.
+[    5.769354] systemd[1]: Listening on udev Kernel Socket.
+[  OK  ] Listening on udev Kernel Socket.
+[    5.776570] systemd[1]: Listening on udev Varlink Socket.
+[  OK  ] Listening on udev Varlink Socket.
+[    5.783098] systemd[1]: Listening on User Database Manager Socket.
+[  OK  ] Listening on User Database Manager Socket.
+[    5.835663] systemd[1]: Mounting Huge Pages File System...
+         Mounting Huge Pages File System...
+[    5.868922] systemd[1]: Mounting POSIX Message Queue File System...
+         Mounting POSIX Message Queue File System...
+[    5.913004] systemd[1]: Mounting Kernel Debug File System...
+         Mounting Kernel Debug File System...
+[    5.948627] systemd[1]: Mounting Kernel Trace File System...
+         Mounting Kernel Trace File System...
+[    5.964043] systemd[1]: tmp.mount: x-systemd.graceful-option=usrquota specified, but option is not available, suppressing.
+[    6.032651] systemd[1]: Mounting Temporary Directory /tmp...
+         Mounting Temporary Directory /tmp...
+[    6.071855] systemd[1]: Starting Create List of Static Device Nodes...
+         Starting Create List of Static Device Nodes...
+[    6.106524] systemd[1]: Starting Load Kernel Module configfs...
+         Starting Load Kernel Module configfs...
+[    6.157720] systemd[1]: Starting Load Kernel Module drm...
+         Starting Load Kernel Module drm...
+[    6.191811] systemd[1]: Starting Load Kernel Module efi_pstore...
+         Starting Load Kernel Module efi_pstore...
+[    6.227263] systemd[1]: Starting Load Kernel Module fuse...
+         Starting Load Kernel Module fuse...
+[    6.234508] systemd[1]: File System Check on Root Device skipped, unmet condition check ConditionPathIsReadWrite=!/
+[    6.238890] systemd[1]: Clear Stale Hibernate Storage Info skipped, unmet condition check ConditionPathExists=/sys/firmware/efi/efivars/HibernateLocation-8cf2644b-4b0b-428f-9387-6d876050dc67
+[    6.300885] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[    6.311555] systemd[1]: Load Kernel Modules skipped, no trigger condition checks were met.
+[    6.352396] systemd[1]: Starting Generate Network Units from Kernel Command Line...
+         Starting Generate Network Units from Kernel Command Line...
+[    6.360660] systemd[1]: Userspace Out-Of-Memory (OOM) Killer skipped, unmet condition check ConditionPathExists=/proc/pressure/memory
+[    6.414020] systemd[1]: Starting Remount Root and Kernel File Systems...
+         Starting Remount Root and Kernel File Systems...
+[    6.453235] systemd[1]: Starting Apply Kernel Variables...
+         Starting Apply Kernel Variables...
+[    6.478743] systemd-journald[254]: Collecting audit messages is disabled.
+[    6.507619] systemd[1]: Starting Load udev Rules from Credentials...
+         Starting Load udev Rules from Credentials...
+[    6.587261] systemd[1]: Starting Coldplug All udev Devices...
+         Starting Coldplug All udev Devices...
+[    6.600061] EXT4-fs (vda1): re-mounted c17550b1-644c-409c-903f-82b8fd12f2c9.
+[    7.050335] systemd[1]: Started Journal Service.
+[  OK  ] Started Journal Service.
+[  OK  ] Mounted Huge Pages File System.
+[  OK  ] Mounted POSIX Message Queue File System.
+[  OK  ] Mounted Kernel Debug File System.
+[  OK  ] Mounted Kernel Trace File System.
+[  OK  ] Mounted Temporary Directory /tmp.
+[  OK  ] Finished Create List of Static Device Nodes.
+[  OK  ] Finished Load Kernel Module configfs.
+[  OK  ] Finished Load Kernel Module drm.
+[  OK  ] Finished Load Kernel Module efi_pstore.
+[  OK  ] Finished Load Kernel Module fuse.
+[  OK  ] Finished Generate Network Units from Kernel Command Line.
+[  OK  ] Finished Remount Root and Kernel File Systems.
+[  OK  ] Finished Apply Kernel Variables.
+[  OK  ] Finished Load udev Rules from Credentials.
+[  OK  ] Reached target Preparation for Network.
+         Mounting Kernel Configuration File System...
+         Starting Flush Journal to Persistent Storage...
+         Starting Load/Save OS Random Seed...
+[    7.790721] systemd-journald[254]: Received client request to flush runtime journal.
+         Starting Network Name Resolution...
+         Starting Network Time Synchronization...
+         Starting Create Static Device Nodes in /dev gracefully...
+[  OK  ] Mounted Kernel Configuration File System.
+[  OK  ] Finished Load/Save OS Random Seed.
+         Starting Load Kernel Module tun...
+         Starting User Database Manager...
+[  OK  ] Finished Flush Journal to Persistent Storage.
+[  OK  ] Finished Load Kernel Module tun.
+         Starting Namespace Resource Manager...
+[  OK  ] Started User Database Manager.
+[  OK  ] Started Namespace Resource Manager.
+[  OK  ] Finished Create Static Device Nodes in /dev gracefully.
+         Starting Create Static Device Nodes in /dev...
+[  OK  ] Started Network Time Synchronization.
+[  OK  ] Reached target System Time Set.
+[  OK  ] Finished Create Static Device Nodes in /dev.
+[  OK  ] Reached target Preparation for Local File Systems.
+[  OK  ] Reached target Local File Systems.
+[  OK  ] Reached target Virtual Machines and Containers.
+[  OK  ] Listening on System Extension Image Management.
+         Starting Create System Files and Directories...
+         Starting Rule-based Manager for Device Events and Files...
+         Starting Load JSON user/group Records from Credentials...
+[  OK  ] Started Network Name Resolution.
+[  OK  ] Reached target Host and Network Name Lookups.
+[  OK  ] Finished Load JSON user/group Records from Credentials.
+[  OK  ] Finished Coldplug All udev Devices.
+[  OK  ] Started Rule-based Manager for Device Events and Files.
+         Starting Network Management...
+[  OK  ] Finished Create System Files and Directories.
+         Starting Record System Boot/Shutdown in UTMP...
+[  OK  ] Started Network Management.
+[  OK  ] Reached target Network.
+         Starting Enable Persistent Storage in systemd-networkd...
+[  OK  ] Finished Record System Boot/Shutdown in UTMP.
+[  OK  ] Reached target System Initialization.
+[  OK  ] Started Periodic ext4 Online Metadata Check for All Filesystems.
+[  OK  ] Started Daily man-db regeneration.
+[  OK  ] Started Daily Cleanup of Temporary Directories.
+[  OK  ] Started Update PKI/TLS certificate store weekly.
+[  OK  ] Reached target Timer Units.
+[  OK  ] Listening on D-Bus System Message Bus Socket.
+[  OK  ] Listening on OpenSSH Server Socket (systemd-ssh-generator, AF_UNIX Local).
+[  OK  ] Listening on Hostname Service Socket.
+[  OK  ] Listening on User Login Management Varlink Socket.
+[  OK  ] Listening on Virtual Machine and Container Registration Service Socket.
+[  OK  ] Reached target Socket Units.
+[  OK  ] Reached target Basic System.
+         Starting D-Bus System Message Bus...
+         Starting Remove Stale Online ext4 Metadata Check Snapshots...
+[  OK  ] Started Getty on tty1.
+         Starting OpenSSH server daemon...
+         Starting User Login Management...
+[  OK  ] Finished Enable Persistent Storage in systemd-networkd.
+[  OK  ] Started OpenSSH server daemon.
+[  OK  ] Started User Login Management.
+[  OK  ] Started D-Bus System Message Bus.
+[  OK  ] Finished Remove Stale Online ext4 Metadata Check Snapshots.
+[  OK  ] Found device /dev/ttyS0.
+[  OK  ] Started Serial Getty on ttyS0.
+[  OK  ] Reached target Login Prompts.
+[  OK  ] Reached target Multi-User System.
+[  OK  ] Reached target Graphical Interface.
+         Starting Virtual Console Setup...
+
+lfs login: root
+Password:
+No mail.
+-bash-5.3# uname -a
+Linux lfs 6.18.10 #1 SMP Mon May 25 00:18:51 CST 2026 riscv64 GNU/Linux
+-bash-5.3# ls /
+bin   dev  home  lib64       media  opt   root  sbin     srv  tmp  var
+boot  etc  lib   lost+found  mnt    proc  run   sources  sys  usr
+-bash-5.3# dmesg | tail -5 && mount
+[    6.507619] systemd[1]: Starting Load udev Rules from Credentials...
+[    6.587261] systemd[1]: Starting Coldplug All udev Devices...
+[    6.600061] EXT4-fs (vda1): re-mounted c17550b1-644c-409c-903f-82b8fd12f2c9.
+[    7.050335] systemd[1]: Started Journal Service.
+[    7.790721] systemd-journald[254]: Received client request to flush runtime journal.
+/dev/vda1 on / type ext4 (rw,relatime)
+devtmpfs on /dev type devtmpfs (rw,nosuid,relatime,size=1489048k,nr_inodes=372262,mode=755)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,size=596104k,nr_inodes=819200,mode=755)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot,memory_hugetlb_accounting)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,nosuid,nodev,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=1490260k,nr_inodes=1048576)
+none on /run/credentials/systemd-journald.service type tmpfs (ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,noswap)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+none on /run/credentials/systemd-resolved.service type tmpfs (ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,noswap)
+none on /run/credentials/systemd-networkd.service type tmpfs (ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,noswap)
+none on /run/credentials/serial-getty@ttyS0.service type tmpfs (ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,noswap)
+none on /run/credentials/getty@tty1.service type tmpfs (ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,noswap)
+-bash-5.3# systemctl list-units --state=failed --no-legend
+-bash-5.3# free -h
+               total        used        free      shared  buff/cache   available
+Mem:           2.8Gi        92Mi       2.7Gi       1.3Mi        82Mi       2.8Gi
+Swap:             0B          0B          0B
+-bash-5.3# ip link show eth0
+2: eth0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:12:34:56 brd ff:ff:ff:ff:ff:ff
+    altname enx525400123456
+-bash-5.3# ping baidu.com
+ping: unknown host
+-bash-5.3# ip link set eth0 up
+-bash-5.3# ping baidu.com
+ping: unknown host
+-bash-5.3# ip addr add 10.0.2.15/24 dev eth0
+-bash-5.3# ip link set eth0 up
+-bash-5.3# ip route add default via 10.0.2.2
+-bash-5.3# echo "nameserver 10.0.2.3" > /etc/resolv.conf
+-bash-5.3# ping baidu.com
+PING baidu.com (110.242.74.102): 56 data bytes
+64 bytes from 110.242.74.102: icmp_seq=0 ttl=255 time=68.676 ms
+64 bytes from 110.242.74.102: icmp_seq=1 ttl=255 time=41.119 ms
+64 bytes from 110.242.74.102: icmp_seq=2 ttl=255 time=60.652 ms
+64 bytes from 110.242.74.102: icmp_seq=3 ttl=255 time=98.377 ms
+64 bytes from 110.242.74.102: icmp_seq=4 ttl=255 time=57.084 ms
+^C--- baidu.com ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max/stddev = 41.119/65.182/98.377/18.864 ms
+-bash-5.3# poweroff
+-bash-5.3# [  OK  ] Removed slice Slice /system/modprobe.
+[  OK  ] Stopped target Graphical Interface.
+[  OK  ] Stopped target Multi-User System.
+[  OK  ] Stopped target Login Prompts.
+[  OK  ] Stopped target Virtual Machines and Containers.
+[  OK  ] Stopped target Host and Network Name Lookups.
+[  OK  ] Stopped target Remote File Systems.
+[  OK  ] Stopped target Timer Units.
+[  OK  ] Stopped Periodic ext4 Online Metadata Check for All Filesystems.
+[  OK  ] Stopped Daily man-db regeneration.
+[  OK  ] Stopped Daily Cleanup of Temporary Directories.
+[  OK  ] Stopped Update PKI/TLS certificate store weekly.
+[  OK  ] Stopped target System Time Set.
+         Stopping D-Bus System Message Bus...
+         Stopping Getty on tty1...
+
+         Stopping Serial Getty on ttyS0...
+         Stopping OpenSSH server daemon...
+         Stopping User Login Management...
+         Stopping Enable Persistent Storage in systemd-networkd...
+         Stopping Load/Save OS Random Seed...
+[  OK  ] Stopped Load udev Rules from Credentials.
+[  OK  ] Stopped Load JSON user/group Records from Credentials.
+[  OK  ] Stopped D-Bus System Message Bus.
+[  OK  ] Stopped Getty on tty1.
+[  OK  ] Stopped User Login Management.
+[  OK  ] Stopped OpenSSH server daemon.
+[  OK  ] Stopped Serial Getty on ttyS0.
+  OK  ] Stopped Load/Save OS Random Seed.
+[  OK  ] Removed slice Slice /system/getty.
+[  OK  ] Removed slice Slice /system/serial-getty.
+[  OK  ] Stopped target Basic System.
+[  OK  ] Stopped target Network.
+[  OK  ] Stopped target Path Units.
+[  OK  ] Stopped Dispatch Password Requests to Console Directory Watch.
+[  OK  ] Stopped Forward Password Requests to Wall Directory Watch.
+[  OK  ] Stopped target Slice Units.
+[  OK  ] Removed slice User and Session Slice.
+[  OK  ] Stopped target Socket Units.
+[  OK  ] Closed D-Bus System Message Bus Socket.
+[  OK  ] Closed OpenSSH Server Socket (systemd-ssh-generator, AF_UNIX Local).
+[  OK  ] Closed Hostname Service Socket.
+[  OK  ] Closed User Login Management Varlink Socket.
+[  OK  ] Closed Virtual Machine and Container Registration Service Socket.
+[  OK  ] Stopped target System Initialization.
+[  OK  ] Closed DDI File System Mounter Socket.
+[  OK  ] Closed Console Output Muting Service Socket.
+[  OK  ] Closed Disk Repartitioning Service Socket.
+         Stopping Namespace Resource Manager...
+         Stopping Network Name Resolution...
+         Stopping Network Time Synchronization...
+         Stopping Record System Boot/Shutdown in UTMP...
+[  OK  ] Stopped Network Name Resolution.
+[  OK  ] Stopped Network Time Synchronization.
+[  OK  ] Stopped Namespace Resource Manager.
+[  OK  ] Stopped Enable Persistent Storage in systemd-networkd.
+[  OK  ] Stopped Record System Boot/Shutdown in UTMP.
+[  OK  ] Closed Namespace Resource Manager Socket.
+[  OK  ] Closed Resolve Monitor Varlink Socket.
+[  OK  ] Closed Resolve Service Varlink Socket.
+         Stopping Network Management...
+[  OK  ] Stopped Create System Files and Directories.
+[  OK  ] Stopped target Local File Systems.
+[  OK  ] Stopped target Preparation for Local File Systems.
+         Unmounting Temporary Directory /tmp...
+[  OK  ] Stopped Remount Root and Kernel File Systems.
+[  OK  ] Stopped Create Static Device Nodes in /dev.
+[  OK  ] Stopped Create Static Device Nodes in /dev gracefully.
+[  OK  ] Stopped Network Management.
+[  OK  ] Unmounted Temporary Directory /tmp.
+[  OK  ] Stopped target Preparation for Network.
+[  OK  ] Stopped target Swaps.
+[  OK  ] Reached target Unmount All Filesystems.
+[  OK  ] Closed Network Management Resolve Hook Socket.
+[  OK  ] Closed Network Management Varlink Socket.
+[  OK  ] Closed Network Management Netlink Socket.
+[  OK  ] Stopped Generate Network Units from Kernel Command Line.
+[  OK  ] Stopped Apply Kernel Variables.
+[  OK  ] Closed Process Core Dump Socket.
+[  OK  ] Reached target System Shutdown.
+[  OK  ] Reached target Late Shutdown Services.
+[  OK  ] Finished System Power Off.
+[  OK  ] Reached target System Power Off.
+[  241.509357] systemd-shutdown[1]: Syncing filesystems and block devices.
+[  241.592816] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[  241.638669] systemd-journald[254]: Received SIGTERM from PID 1 (systemd-shutdow).
+[  241.694059] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[  241.717207] systemd-shutdown[1]: Unmounting file systems.
+[  241.732984] (sd-umount)[896]: Unmounting '/run/credentials/systemd-journald.service'.
+[  241.743185] (sd-remount)[897]: Remounting '/' read-only with options ''.
+[  241.780069] EXT4-fs (vda1): re-mounted c17550b1-644c-409c-903f-82b8fd12f2c9 ro.
+[  241.798045] systemd-shutdown[1]: All filesystems unmounted.
+[  241.799836] systemd-shutdown[1]: Deactivating swaps.
+[  241.802898] systemd-shutdown[1]: All swaps deactivated.
+[  241.805330] systemd-shutdown[1]: Detaching loop devices.
+[  241.835298] systemd-shutdown[1]: All loop devices detached.
+[  241.837729] systemd-shutdown[1]: Stopping MD devices.
+[  241.840286] systemd-shutdown[1]: All MD devices stopped.
+[  241.841771] systemd-shutdown[1]: Detaching DM devices.
+[  241.844872] systemd-shutdown[1]: All DM devices detached.
+[  241.846686] systemd-shutdown[1]: All filesystems, swaps, loop devices, MD devices and DM devices detached.
+[  241.855743] systemd-shutdown[1]: Syncing filesystems and block devices.
+[  241.862005] systemd-shutdown[1]: Powering off.
+[  241.867099] reboot: Power down
+PS E:\Project\OERV-research\openruyi\pretask>
