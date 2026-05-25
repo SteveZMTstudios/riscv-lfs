@@ -37,7 +37,7 @@
 
 > **绝对不要搜索中文教程。** CSDN/php.cn 上的大部分“教程”都是 AI 生成的，版本、命令和设置都是错误的。无论您使用什么搜索引擎。请使用英文在 Google 上搜索。
 
---
+---
 
 ## 步骤 0：启动前必须做的三件重要事情
 
@@ -154,25 +154,97 @@ Binutils pass1 → GCC pass1 → Linux Header → Glibc → GCC pass2
 
 ---
 
-## QEMU 启动命令
+## 从 Release 运行
+
+从 [Releases](https://github.com/SteveZMTstudios/riscv-lfs/releases) 下载以下三个文件：
+
+```
+vmlinuz-6.18.10-lfs-13.0-systemd                  (~23 MB)
+rootfs-riscv64-lfs-SteveZMTstudios.tar.zst      (~583 MB)  ← 方式 1 用
+rootfs-riscv64-lfs-SteveZMTstudios.cpio.zst      (~631 MB)  ← 方式 2 用
+```
+
+### 方式 1：磁盘镜像（持久化，适合日常使用）
+
+```bash
+# 解压 rootfs
+tar -xf rootfs-riscv64-lfs-SteveZMTstudios.tar.zst
+
+# 创建 8G 磁盘镜像
+qemu-img create lfs-riscv64.img 8G
+# 或: dd if=/dev/zero of=lfs-riscv64.img bs=1G count=8
+
+# 分区 + 格式化
+sudo losetup --show -fP lfs-riscv64.img
+# 假设输出 /dev/loop0
+sudo fdisk /dev/loop0 << EOF
+n
+p
+1
+
+
+w
+EOF
+
+sudo mkfs.ext4 /dev/loop0p1
+sudo mount /dev/loop0p1 /mnt
+
+# 写入 rootfs
+sudo cp -a rootfs-riscv64-lfs-SteveZMTstudios/* /mnt/
+
+sudo umount /mnt
+sudo losetup -d /dev/loop0
+```
 
 ```powershell
+# Windows PowerShell — 启动
 qemu-system-riscv64.exe `
   -machine virt `
   -cpu rv64 `
   -smp 4 `
   -accel tcg,thread=multi `
   -m 3G `
-  -kernel .\boot\vmlinuz-6.18.10-lfs-13.0-systemd `
+  -kernel .\vmlinuz-6.18.10-lfs-13.0-systemd `
   -append "root=/dev/vda1 rw console=ttyS0" `
-  -drive file=riscv64-lfs.img,format=raw,if=none,id=hd `
+  -drive file=lfs-riscv64.img,format=raw,if=none,id=hd `
   -device virtio-blk-device,drive=hd `
   -netdev user,id=net0,hostfwd=tcp:127.0.0.1:22222-:22 `
   -device virtio-net-device,netdev=net0 `
   -nographic
 ```
 
-Login: `root` / `000000`  SSH: `ssh -p 22222 root@localhost`
+### 方式 2：initramfs
+需要 8GB 或更多内存。
+
+```powershell
+# Windows PowerShell
+qemu-system-riscv64.exe `
+  -machine virt `
+  -cpu rv64 `
+  -smp 4 `
+  -accel tcg,thread=multi `
+  -m 8G `
+  -kernel .\vmlinuz-6.18.10-lfs-13.0-systemd `
+  -initrd .\rootfs-riscv64-lfs-SteveZMTstudios.cpio.zst `
+  -append "console=ttyS0 rdinit=/usr/lib/systemd/systemd" `
+  -nographic
+```
+
+```bash
+# Linux / macOS
+qemu-system-riscv64 \
+  -machine virt \
+  -cpu rv64 \
+  -smp 4 \
+  -accel tcg,thread=multi \
+  -m 8G \
+  -kernel ./vmlinuz-6.18.10-lfs-13.0-systemd \
+  -initrd ./rootfs-riscv64-lfs-SteveZMTstudios.cpio.zst \
+  -append "console=ttyS0 rdinit=/usr/lib/systemd/systemd" \
+  -nographic
+```
+
+Login: `root` / `000000`  SSH: `ssh -p 22222 root@localhost`（仅方式 1）
 
 ---
 
